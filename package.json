@@ -12,14 +12,12 @@
     "@expo-google-fonts/roboto": "^0.4.0",
     "@react-native-firebase/app": "^22.4.0",
     "@react-native-google-signin/google-signin": "^15.0.0",
-    "@realm/react": "^0.11.0",
     "expo": "~53.0.17",
     "expo-font": "~13.3.2",
     "expo-status-bar": "~2.2.3",
     "expo-system-ui": "~5.0.10",
     "react": "19.0.0",
     "react-native": "0.79.5",
-    "realm": "^20.1.0",
     "styled-components": "^6.1.19"
   },
   "devDependencies": {
