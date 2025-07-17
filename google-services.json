@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "554514498124",
+    "project_id": "igniteshoesapp-25024",
+    "storage_bucket": "igniteshoesapp-25024.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:554514498124:android:172bb78a4e8975bf786ae9",
+        "android_client_info": {
+          "package_name": "com.felipefaustini.ignitefleet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkn0Qb7iO8Uv45HJjKxmx7IozlONdrRC0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

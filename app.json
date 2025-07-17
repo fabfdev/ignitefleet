@@ -13,14 +13,17 @@
       "backgroundColor": "#202024"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.felipefaustini.ignitefleet"
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#202024"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.felipefaustini.ignitefleet"
     },
     "web": {
       "favicon": "./assets/favicon.png"
