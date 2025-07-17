@@ -6,7 +6,7 @@ export const fleetSchema = appSchema({
     tableSchema({
       name: "historic",
       columns: [
-        { name: "user_id", type: "string" },
+        { name: "user_id", type: "string", isIndexed: true }, // see [https://watermelondb.dev/docs/Schema#indexing]
         { name: "license_plate", type: "string" },
         { name: "description", type: "string" },
         { name: "status", type: "string" },

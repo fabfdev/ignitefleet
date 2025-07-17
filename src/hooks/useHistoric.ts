@@ -1,6 +1,6 @@
-import { useDatabase } from '../libs/watermelon/provider/DatabaseProvider';
 import { Historic } from '../libs/watermelon/models/Historic';
 import { Q } from '@nozbe/watermelondb';
+import { useDatabase } from './useDatabase';
 
 export function useHistoric() {
   const { database } = useDatabase();

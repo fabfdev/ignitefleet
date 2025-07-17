@@ -1,4 +1,3 @@
-import { Platform } from 'react-native';
 import { Database } from '@nozbe/watermelondb';
 import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite';
 
@@ -10,8 +9,7 @@ const adapter = new SQLiteAdapter({
   schema: fleetSchema,
   // (optional database name or file system path)
   dbName: 'ignitefleet',
-  jsi: true, /* Platform.OS === 'ios' */
-  // (optional, but you should implement this method)
+  jsi: true,
   onSetUpError: error => {
     // Database failed to load -- offer the user to reload the app or log out
     console.error('Database setup error:', error);
