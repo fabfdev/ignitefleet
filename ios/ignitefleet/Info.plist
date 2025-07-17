@@ -30,6 +30,12 @@
           <string>com.felipefaustini.ignitefleet</string>
         </array>
       </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>com.googleusercontent.apps.554514498124-n8foamfkp081kv6l5vujpuoglnv8kagd</string>
+        </array>
+      </dict>
     </array>
     <key>CFBundleVersion</key>
     <string>1</string>
