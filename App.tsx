@@ -8,6 +8,7 @@ import {
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { AuthContextProvider } from "./src/contexts/AuthContext";
+import { DatabaseProvider } from "./src/libs/watermelon/provider/DatabaseProvider";
 
 import theme from "./src/theme";
 
@@ -30,14 +31,16 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <SafeAreaProvider>
-        <AuthContextProvider fallback={SignIn}>
-          <StatusBar
-            barStyle={"light-content"}
-            backgroundColor={"transparent"}
-            translucent
-          />
-          <Routes />
-        </AuthContextProvider>
+        <DatabaseProvider>
+          <AuthContextProvider fallback={SignIn}>
+            <StatusBar
+              barStyle={"light-content"}
+              backgroundColor={"transparent"}
+              translucent
+            />
+            <Routes />
+          </AuthContextProvider>
+        </DatabaseProvider>
       </SafeAreaProvider>
     </ThemeProvider>
   );

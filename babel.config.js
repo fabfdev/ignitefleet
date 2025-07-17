@@ -9,7 +9,8 @@ module.exports = function(api) {
           'moduleName': '@env',
           'allowUndefined': false
         }
-      ]
+      ],
+      ["@babel/plugin-proposal-decorators", { "legacy": true }]
     ]
   };
 };

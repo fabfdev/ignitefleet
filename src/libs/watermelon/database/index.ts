@@ -1,0 +1,27 @@
+import { Platform } from 'react-native';
+import { Database } from '@nozbe/watermelondb';
+import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite';
+
+import { fleetSchema } from '../schemas/schema';
+import { Historic } from '../models/Historic';
+
+// First, create the adapter to the underlying database:
+const adapter = new SQLiteAdapter({
+  schema: fleetSchema,
+  // (optional database name or file system path)
+  dbName: 'ignitefleet',
+  jsi: true, /* Platform.OS === 'ios' */
+  // (optional, but you should implement this method)
+  onSetUpError: error => {
+    // Database failed to load -- offer the user to reload the app or log out
+    console.error('Database setup error:', error);
+  }
+});
+
+// Then, make a Watermelon database from it!
+export const database = new Database({
+  adapter,
+  modelClasses: [
+    Historic,
+  ],
+});

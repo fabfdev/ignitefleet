@@ -1,0 +1,18 @@
+import { appSchema, tableSchema } from "@nozbe/watermelondb";
+
+export const fleetSchema = appSchema({
+  version: 1,
+  tables: [
+    tableSchema({
+      name: "historic",
+      columns: [
+        { name: "user_id", type: "string" },
+        { name: "license_plate", type: "string" },
+        { name: "description", type: "string" },
+        { name: "status", type: "string" },
+        { name: "created_at", type: "number" },
+        { name: "updated_at", type: "number" },
+      ],
+    }),
+  ],
+});
