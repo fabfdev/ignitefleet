@@ -30,11 +30,6 @@ export function AuthContextProvider({
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
 
   function handleAuthStateChanged(user: FirebaseAuthTypes.User | null) {
-    if (user) {
-      console.log("Auth state changed: User signed in -", user);
-    } else {
-      console.log("Auth state changed: User signed out");
-    }
     setUser(user);
     setInitializing(false);
   }
