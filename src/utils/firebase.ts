@@ -13,12 +13,11 @@ export function initializeFirebase() {
       app = getApp();
     }
     
-    console.log('Firebase app:', app);
     console.log('Firebase app name:', app.name);
-    console.log('Firebase app options:', app.options);
+    console.log('Firebase app initialized successfully');
     
     const auth = getAuth(app);
-    console.log('Firebase Auth initialized:', auth);
+    console.log('Firebase Auth initialized successfully');
     
     return { app, auth };
   } catch (error) {

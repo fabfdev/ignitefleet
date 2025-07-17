@@ -1,8 +1,11 @@
 import { createContext, useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged } from "@react-native-firebase/auth";
+import { getAuth, onAuthStateChanged, signOut as firebaseSignOut } from "@react-native-firebase/auth";
+import { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 export type AuthContextDataProps = {
   initializing: boolean;
+  signOut: () => void;
 };
 
 type AuthContextProviderProps = {
@@ -22,13 +25,35 @@ export function AuthContextProvider({
   fallback: Fallback,
   children,
 }: AuthContextProviderProps) {
-  const [initializing, setInitiliazing] = useState(true);
-  const [user, setUser] = useState();
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
 
-  function handleAuthStateChanged(user) {
-    console.log(user);
+  function handleAuthStateChanged(user: FirebaseAuthTypes.User | null) {
+    if (user) {
+      console.log("Auth state changed: User signed in -", user);
+    } else {
+      console.log("Auth state changed: User signed out");
+    }
     setUser(user);
-    setInitiliazing(false);
+    setInitializing(false);
+  }
+
+  async function signOut() {
+    try {
+      console.log('Starting sign out process...');
+      
+      // First sign out from Google
+      await GoogleSignin.signOut();
+      console.log('Google sign out successful');
+      
+      // Then sign out from Firebase Auth
+      const auth = getAuth();
+      await firebaseSignOut(auth);
+      console.log('Firebase sign out successful');
+      
+    } catch (error) {
+      console.error('Sign out error:', error instanceof Error ? error.message : String(error));
+    }
   }
 
   useEffect(() => {
@@ -51,6 +76,7 @@ export function AuthContextProvider({
     <AuthContext.Provider
       value={{
         initializing,
+        signOut,
       }}
     >
       {children}

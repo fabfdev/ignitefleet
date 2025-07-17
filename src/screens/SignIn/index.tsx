@@ -1,11 +1,17 @@
 import { useState } from "react";
-import { Container, Slogan, Title } from "./styles";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import { getAuth, GoogleAuthProvider, signInWithCredential } from "@react-native-firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithCredential,
+} from "@react-native-firebase/auth";
 
-import { WEB_CLIENT_ID, IOS_CLIENT_ID, ANDROID_CLIENT_ID } from "@env";
+import { WEB_CLIENT_ID, IOS_CLIENT_ID } from "@env";
+
+import { Container, Slogan, Title } from "./styles";
 
 import backgroundImg from "../../assets/background.png";
+
 import { Button } from "../../components/Button";
 
 GoogleSignin.configure({
@@ -19,19 +25,19 @@ export function SignIn() {
 
   async function handleGoogleSignIn() {
     try {
-      console.log(WEB_CLIENT_ID);
-      console.log(ANDROID_CLIENT_ID);
       setIsAuthenticating(true);
 
-      await GoogleSignin.signOut();
       await GoogleSignin.hasPlayServices();
       const { data } = await GoogleSignin.signIn();
       const idToken = data?.idToken;
 
       if (idToken) {
         const googleCredential = GoogleAuthProvider.credential(idToken);
+        const auth = getAuth();
 
-        return await signInWithCredential(getAuth(), googleCredential);
+        const result = await signInWithCredential(auth, googleCredential);
+
+        return result;
       } else {
         throw new Error("No ID token found");
       }
