@@ -5,6 +5,7 @@ import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 export type AuthContextDataProps = {
   initializing: boolean;
+  user: FirebaseAuthTypes.User | null;
   signOut: () => void;
 };
 
@@ -76,6 +77,7 @@ export function AuthContextProvider({
     <AuthContext.Provider
       value={{
         initializing,
+        user,
         signOut,
       }}
     >

@@ -1,14 +1,13 @@
+import { HomeHeader } from "../../components/HomeHeader";
 import { useAuth } from "../../hooks/useAuth";
-import { Container, SignOutButton, SignOutText } from "./styles";
+import { Container } from "./styles";
 
 export function Home() {
   const { signOut } = useAuth();
 
   return (
     <Container>
-      <SignOutButton onPress={signOut}>
-        <SignOutText>Deslogar</SignOutText>
-      </SignOutButton>
+      <HomeHeader />
     </Container>
   );
 }
