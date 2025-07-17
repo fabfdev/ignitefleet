@@ -10,14 +10,18 @@ import { AuthContextProvider } from "./src/contexts/AuthContext";
 import theme from "./src/theme";
 
 import { SignIn } from "./src/screens/SignIn";
+import { Home } from "./src/screens/Home";
 
 import { Loading } from "./src/components/Loading";
-import { UserProvider } from "@realm/react";
+
+import { useAuth } from "./src/hooks/useAuth";
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold });
 
-  if (!fontsLoaded) {
+  const { initializing } = useAuth();
+
+  if (!fontsLoaded || initializing) {
     return <Loading />;
   }
 
@@ -29,6 +33,7 @@ export default function App() {
           backgroundColor={"transparent"}
           translucent
         />
+        <Home />
       </AuthContextProvider>
     </ThemeProvider>
   );

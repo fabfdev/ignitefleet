@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Container, Slogan, Title } from "./styles";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { getAuth, GoogleAuthProvider, signInWithCredential } from "@react-native-firebase/auth";
 
 import { WEB_CLIENT_ID, IOS_CLIENT_ID } from "@env";
 
@@ -20,13 +21,18 @@ export function SignIn() {
     try {
       setIsAuthenticating(true);
 
+      await GoogleSignin.signOut();
+      await GoogleSignin.hasPlayServices();
       const { data } = await GoogleSignin.signIn();
       const idToken = data?.idToken;
 
       if (idToken) {
         console.log(idToken);
+        const googleCredential = GoogleAuthProvider.credential(idToken);
+
+        return signInWithCredential(getAuth(), googleCredential);
       } else {
-        setIsAuthenticating(false);
+        throw new Error("No ID token found");
       }
     } catch (error) {
       console.log(error);
@@ -39,7 +45,11 @@ export function SignIn() {
       <Title>Ignite Fleet</Title>
       <Slogan>Gestão de uso de veículos</Slogan>
 
-      <Button title="Entrar com Google" isLoading={isAuthenticating} onPress={handleGoogleSignIn} />
+      <Button
+        title="Entrar com Google"
+        isLoading={isAuthenticating}
+        onPress={handleGoogleSignIn}
+      />
     </Container>
   );
 }

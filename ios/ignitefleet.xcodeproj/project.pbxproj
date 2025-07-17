@@ -14,6 +14,7 @@
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		BF0F15B6296EDB2AF0B07CAD /* libPods-ignitefleet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1680BF5B587344CF76AAF2 /* libPods-ignitefleet.a */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
+		1D65CBCCA9464639A72D633C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E5639212928E45BEA6EF0CA2 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = ignitefleet/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* ignitefleet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "ignitefleet-Bridging-Header.h"; path = "ignitefleet/ignitefleet-Bridging-Header.h"; sourceTree = "<group>"; };
 		F4C93BFB33A4A5AD03414444 /* Pods-ignitefleet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ignitefleet.release.xcconfig"; path = "Target Support Files/Pods-ignitefleet/Pods-ignitefleet.release.xcconfig"; sourceTree = "<group>"; };
+		E5639212928E45BEA6EF0CA2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; name = "GoogleService-Info.plist"; path = "ignitefleet/GoogleService-Info.plist"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.xml; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +56,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
 				62D39A72FA9E67C48593671A /* PrivacyInfo.xcprivacy */,
+				E5639212928E45BEA6EF0CA2 /* GoogleService-Info.plist */,
 			);
 			name = ignitefleet;
 			sourceTree = "<group>";
@@ -197,6 +200,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
 				525C986AA8EEFD3D1B34DBBE /* PrivacyInfo.xcprivacy in Resources */,
+				1D65CBCCA9464639A72D633C /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

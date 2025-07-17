@@ -1,7 +1,9 @@
 import { createContext, useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "@react-native-firebase/auth";
 
-export type AuthContextDataProps = {};
+export type AuthContextDataProps = {
+  initializing: boolean;
+};
 
 type AuthContextProviderProps = {
   fallback:
@@ -45,5 +47,13 @@ export function AuthContextProvider({
     return <>{Fallback}</>;
   }
 
-  return <AuthContext.Provider value={{}}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider
+      value={{
+        initializing,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
