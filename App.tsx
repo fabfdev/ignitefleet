@@ -5,16 +5,18 @@ import {
   Roboto_400Regular,
   Roboto_700Bold,
 } from "@expo-google-fonts/roboto";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+
 import { AuthContextProvider } from "./src/contexts/AuthContext";
 
 import theme from "./src/theme";
 
 import { SignIn } from "./src/screens/SignIn";
-import { Home } from "./src/screens/Home";
 
 import { Loading } from "./src/components/Loading";
 
 import { useAuth } from "./src/hooks/useAuth";
+import { Routes } from "./src/routes";
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold });
@@ -27,14 +29,16 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <AuthContextProvider fallback={SignIn}>
-        <StatusBar
-          barStyle={"light-content"}
-          backgroundColor={"transparent"}
-          translucent
-        />
-        <Home />
-      </AuthContextProvider>
+      <SafeAreaProvider>
+        <AuthContextProvider fallback={SignIn}>
+          <StatusBar
+            barStyle={"light-content"}
+            backgroundColor={"transparent"}
+            translucent
+          />
+          <Routes />
+        </AuthContextProvider>
+      </SafeAreaProvider>
     </ThemeProvider>
   );
 }
