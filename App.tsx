@@ -30,7 +30,7 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <SafeAreaProvider>
+      <SafeAreaProvider style={{ flex: 1, backgroundColor: theme.COLORS.GRAY_800 }}>
         <DatabaseProvider>
           <AuthContextProvider fallback={SignIn}>
             <StatusBar
