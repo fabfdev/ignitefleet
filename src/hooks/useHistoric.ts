@@ -27,6 +27,16 @@ export function useHistoric() {
     }
   }
 
+  async function getHistoricById(id: string) {
+    try {
+      const historic = await database.get<Historic>("historic").find(id);
+      return historic;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
   async function getHistoricByUser(userId: string) {
     try {
       const historic = await database
@@ -91,6 +101,7 @@ export function useHistoric() {
 
   return {
     createHistoric,
+    getHistoricById,
     getHistoricByUser,
     getHistoricByUserAndDeparture,
     updateHistoric,

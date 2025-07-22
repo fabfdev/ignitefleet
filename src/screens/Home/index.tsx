@@ -25,7 +25,7 @@ export function Home() {
     navigate("departure");
   }
 
-  async function fetchVehicle() {
+  async function fetchVehicleInUse() {
     try {
       const historic = await getHistoricByUserAndDeparture(user!.uid);
       setCurrentVehicle(historic[0]);
@@ -36,7 +36,7 @@ export function Home() {
   }
 
   useEffect(() => {
-    fetchVehicle();
+    fetchVehicleInUse();
   }, []);
 
   return (
