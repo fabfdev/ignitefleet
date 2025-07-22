@@ -1,6 +1,6 @@
-import { Historic } from '../libs/watermelon/models/Historic';
-import { Q } from '@nozbe/watermelondb';
-import { useDatabase } from './useDatabase';
+import { Historic } from "../libs/watermelon/models/Historic";
+import { Q } from "@nozbe/watermelondb";
+import { useDatabase } from "./useDatabase";
 
 export function useHistoric() {
   const { database } = useDatabase();
@@ -13,7 +13,7 @@ export function useHistoric() {
   }) {
     try {
       const historic = await database.write(async () => {
-        return await database.get<Historic>('historic').create((historic) => {
+        return await database.get<Historic>("historic").create((historic) => {
           historic.user_id = data.user_id;
           historic.license_plate = data.license_plate;
           historic.description = data.description;
@@ -22,7 +22,7 @@ export function useHistoric() {
       });
       return historic;
     } catch (error) {
-      console.error('Error creating historic:', error);
+      console.error("Error creating historic:", error);
       throw error;
     }
   }
@@ -30,23 +30,39 @@ export function useHistoric() {
   async function getHistoricByUser(userId: string) {
     try {
       const historic = await database
-        .get<Historic>('historic')
-        .query(Q.where('user_id', userId))
+        .get<Historic>("historic")
+        .query(Q.where("user_id", userId))
         .fetch();
       return historic;
     } catch (error) {
-      console.error('Error getting historic:', error);
+      console.error("Error getting historic:", error);
       throw error;
     }
   }
 
-  async function updateHistoric(id: string, data: Partial<{
-    license_plate: string;
-    description: string;
-    status: string;
-  }>) {
+  async function getHistoricByUserAndDeparture(userId: string) {
     try {
-      const historic = await database.get<Historic>('historic').find(id);
+      const historic = await database
+        .get<Historic>("historic")
+        .query(Q.where("status", "departure"))
+        .fetch();
+      return historic;
+    } catch (error) {
+      console.error("Error getting historic by departure:", error);
+      throw error;
+    }
+  }
+
+  async function updateHistoric(
+    id: string,
+    data: Partial<{
+      license_plate: string;
+      description: string;
+      status: string;
+    }>
+  ) {
+    try {
+      const historic = await database.get<Historic>("historic").find(id);
       const updatedHistoric = await database.write(async () => {
         return await historic.update((historic) => {
           if (data.license_plate) historic.license_plate = data.license_plate;
@@ -56,19 +72,19 @@ export function useHistoric() {
       });
       return updatedHistoric;
     } catch (error) {
-      console.error('Error updating historic:', error);
+      console.error("Error updating historic:", error);
       throw error;
     }
   }
 
   async function deleteHistoric(id: string) {
     try {
-      const historic = await database.get<Historic>('historic').find(id);
+      const historic = await database.get<Historic>("historic").find(id);
       await database.write(async () => {
         await historic.destroyPermanently();
       });
     } catch (error) {
-      console.error('Error deleting historic:', error);
+      console.error("Error deleting historic:", error);
       throw error;
     }
   }
@@ -76,6 +92,7 @@ export function useHistoric() {
   return {
     createHistoric,
     getHistoricByUser,
+    getHistoricByUserAndDeparture,
     updateHistoric,
     deleteHistoric,
   };
