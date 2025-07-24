@@ -6,6 +6,7 @@ import {
   Roboto_700Bold,
 } from "@expo-google-fonts/roboto";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import "./src/libs/dayjs";
 
 import { AuthContextProvider } from "./src/contexts/AuthContext";
 import { DatabaseProvider } from "./src/libs/watermelon/provider/DatabaseProvider";

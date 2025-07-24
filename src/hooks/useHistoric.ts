@@ -18,6 +18,8 @@ export function useHistoric() {
           historic.license_plate = data.license_plate;
           historic.description = data.description;
           historic.status = data.status;
+          historic.created_at = new Date();
+          historic.updated_at = new Date();
         });
       });
       return historic;
@@ -25,6 +27,17 @@ export function useHistoric() {
       console.error("Error creating historic:", error);
       throw error;
     }
+  }
+
+  function observeHistoricByStatus(userId: string, status: string) {
+    return database
+      .get<Historic>("historic")
+      .query(
+        Q.where("user_id", userId),
+        Q.where("status", status),
+        Q.sortBy("created_at", Q.desc)
+      )
+      .observe();
   }
 
   async function getHistoricById(id: string) {
@@ -69,6 +82,7 @@ export function useHistoric() {
       license_plate: string;
       description: string;
       status: string;
+      updated_at: Date;
     }>
   ) {
     try {
@@ -78,6 +92,7 @@ export function useHistoric() {
           if (data.license_plate) historic.license_plate = data.license_plate;
           if (data.description) historic.description = data.description;
           if (data.status) historic.status = data.status;
+          if (data.updated_at) historic.updated_at = data.updated_at;
         });
       });
       return updatedHistoric;
@@ -101,6 +116,7 @@ export function useHistoric() {
 
   return {
     createHistoric,
+    observeHistoricByStatus,
     getHistoricById,
     getHistoricByUser,
     getHistoricByUserAndDeparture,

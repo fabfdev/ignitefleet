@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { XIcon } from "phosphor-react-native";
+import { ControlIcon, XIcon } from "phosphor-react-native";
 
 import {
   Container,
@@ -25,7 +25,7 @@ type RouteParamProps = {
 
 export function Arrival() {
   const route = useRoute();
-  const { getHistoricById, deleteHistoric } = useHistoric();
+  const { getHistoricById, deleteHistoric, updateHistoric } = useHistoric();
   const { goBack } = useNavigation();
 
   const [historic, setHistoric] = useState<Historic | null>(null);
@@ -33,19 +33,34 @@ export function Arrival() {
   const { id } = route.params as RouteParamProps;
 
   function handleRemoveVehicleUsage() {
-    Alert.alert(
-      "Cancelar",
-      "Cancelar a utilização do veículo?",
-      [
-        { text: "Não", style: "cancel" },
-        { text: "Sim", onPress: () => removeVehicleUsage() }
-      ]
-    )
+    Alert.alert("Cancelar", "Cancelar a utilização do veículo?", [
+      { text: "Não", style: "cancel" },
+      { text: "Sim", onPress: () => removeVehicleUsage() },
+    ]);
   }
 
   async function removeVehicleUsage() {
     await deleteHistoric(id);
     goBack();
+  }
+
+  async function handleArrivalRegister() {
+    try {
+      if (!historic) {
+        return Alert.alert(
+          "Erro",
+          "Erro ao obter dados para chegada do veículo"
+        );
+      }
+
+      await updateHistoric(id, { status: "arrival", updated_at: new Date() });
+
+      Alert.alert("Chegada", "Chegada registrada com sucesso!");
+
+      goBack();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async function fetchHistoric() {
@@ -63,7 +78,9 @@ export function Arrival() {
 
   return (
     <Container>
-      <Header title="Chegada" />
+      <Header
+        title={historic?.status === "departure" ? "Chegada" : "Detalhes"}
+      />
       <Content>
         <Label>Placa do veículo</Label>
 
@@ -72,12 +89,14 @@ export function Arrival() {
         <Label>Finalidade</Label>
 
         <Description>{historic?.description}</Description>
+      </Content>
 
+      {historic?.status === "departure" && (
         <Footer>
           <ButtonIcon icon={XIcon} onPress={handleRemoveVehicleUsage} />
-          <Button title="Registrar chegada" />
+          <Button title="Registrar chegada" onPress={handleArrivalRegister} />
         </Footer>
-      </Content>
+      )}
     </Container>
   );
 }
