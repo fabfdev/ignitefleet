@@ -3,11 +3,13 @@ import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite';
 
 import { fleetSchema } from '../schemas/schema';
 import { Historic } from '../models/Historic';
+import { migrations } from '../migrations/migrations';
 
 // First, create the adapter to the underlying database:
 const adapter = new SQLiteAdapter({
   schema: fleetSchema,
   // (optional database name or file system path)
+  migrations: migrations,
   dbName: 'ignitefleet',
   jsi: true,
   onSetUpError: error => {

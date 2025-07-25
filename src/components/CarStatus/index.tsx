@@ -15,7 +15,7 @@ export function CarStatus({ licensePlate = null, ...rest }: Props) {
   const status = licensePlate ? "chegada" : "saída";
 
   return (
-    <Container {...rest}>
+    <Container activeOpacity={0.7} {...rest}>
       <IconBox>
         <Icon size={52} color={theme.COLORS.BRAND_LIGHT} />
       </IconBox>
