@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { DatabaseContext } from "../libs/watermelon/provider/DatabaseProvider";
+import { DatabaseContext } from "../contexts/DatabaseContext";
 
 export function useDatabase() {
   const context = useContext(DatabaseContext);

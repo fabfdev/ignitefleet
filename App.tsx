@@ -11,7 +11,7 @@ import { useNetInfo } from "@react-native-community/netinfo";
 import "./src/libs/dayjs";
 
 import { AuthContextProvider } from "./src/contexts/AuthContext";
-import { DatabaseProvider } from "./src/libs/watermelon/provider/DatabaseProvider";
+import { DatabaseContextProvider } from "./src/contexts/DatabaseContext";
 
 import theme from "./src/theme";
 
@@ -41,7 +41,7 @@ export default function App() {
         {!netInfo.isConnected && (
           <TopMessage title="Você está off-line." icon={WifiSlashIcon} />
         )}
-        <DatabaseProvider>
+        <DatabaseContextProvider>
           <AuthContextProvider fallback={SignIn}>
             <StatusBar
               barStyle={"light-content"}
@@ -50,7 +50,7 @@ export default function App() {
             />
             <Routes />
           </AuthContextProvider>
-        </DatabaseProvider>
+        </DatabaseContextProvider>
       </SafeAreaProvider>
     </ThemeProvider>
   );

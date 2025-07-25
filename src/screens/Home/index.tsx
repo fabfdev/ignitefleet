@@ -4,14 +4,16 @@ import { useNavigation } from "@react-navigation/native";
 import dayjs from "dayjs";
 
 import { useAuth } from "../../hooks/useAuth";
+import { useDatabase } from "../../hooks/useDatabase";
+import { useHistoric } from "../../hooks/useHistoric";
 
 import { CarStatus } from "../../components/CarStatus";
 import { HomeHeader } from "../../components/HomeHeader";
 
 import { Container, Content, Label, Title } from "./styles";
 import { Historic } from "../../libs/watermelon/models/Historic";
-import { useHistoric } from "../../hooks/useHistoric";
 import { HistoricCard, HistoricCardProps } from "../../components/HistoricCard";
+import { AnimatedWaveBar } from "../../components/AnimatedWaveBar";
 
 export function Home() {
   const [currentVehicle, setCurrentVehicle] = useState<Historic | null>(null);
@@ -21,6 +23,7 @@ export function Home() {
 
   const { user } = useAuth();
   const { navigate } = useNavigation();
+  const { isSyncing, syncData } = useDatabase();
   const { observeHistoricByStatus } = useHistoric();
 
   function handleRegisterMovement() {
@@ -69,6 +72,8 @@ export function Home() {
   return (
     <Container>
       <HomeHeader />
+
+      {isSyncing && <AnimatedWaveBar />}
 
       <Content>
         <CarStatus
