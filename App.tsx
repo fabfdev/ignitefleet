@@ -41,16 +41,16 @@ export default function App() {
         {!netInfo.isConnected && (
           <TopMessage title="Você está off-line." icon={WifiSlashIcon} />
         )}
-        <DatabaseContextProvider>
-          <AuthContextProvider fallback={SignIn}>
+        <AuthContextProvider fallback={SignIn}>
+          <DatabaseContextProvider>
             <StatusBar
               barStyle={"light-content"}
               backgroundColor={"transparent"}
               translucent
             />
             <Routes />
-          </AuthContextProvider>
-        </DatabaseContextProvider>
+          </DatabaseContextProvider>
+        </AuthContextProvider>
       </SafeAreaProvider>
     </ThemeProvider>
   );

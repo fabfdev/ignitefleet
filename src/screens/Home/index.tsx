@@ -69,6 +69,10 @@ export function Home() {
     return () => subscription.unsubscribe();
   }, [user]);
 
+  useEffect(() => {
+    syncData();
+  }, []);
+
   return (
     <Container>
       <HomeHeader />
