@@ -9,7 +9,7 @@ import { getAuth } from "@react-native-firebase/auth";
 interface DatabaseContextType {
   database: Database;
   isSyncing: boolean;
-  syncData: () => void;
+  syncData: () => Promise<void>;
 }
 
 export const DatabaseContext = createContext<DatabaseContextType>(

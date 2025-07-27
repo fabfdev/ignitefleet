@@ -1,4 +1,7 @@
-import { schemaMigrations } from "@nozbe/watermelondb/Schema/migrations";
+import {
+  createTable,
+  schemaMigrations,
+} from "@nozbe/watermelondb/Schema/migrations";
 
 export const migrations = schemaMigrations({
   migrations: [
@@ -7,6 +10,18 @@ export const migrations = schemaMigrations({
       steps: [
         // Exemplo: add coluna nova
         // addColumns({ table: 'historic', columns: [{ name: 'new_column', type: 'string' }] })
+      ],
+    },
+    {
+      toVersion: 3,
+      steps: [
+        createTable({
+          name: "log",
+          columns: [
+            { name: "user_id", type: "string", isIndexed: true },
+            { name: "updated_at", type: "number" },
+          ],
+        }),
       ],
     },
   ],

@@ -1,5 +1,6 @@
 import firestore from "@react-native-firebase/firestore";
 import { SyncPushArgs } from "@nozbe/watermelondb/sync";
+import { markSyncedRecords } from "./markSyncedRecords";
 
 export async function pushChanges({ changes }: SyncPushArgs) {
   const historicChanges = (changes as any).historic;
@@ -34,4 +35,6 @@ export async function pushChanges({ changes }: SyncPushArgs) {
   });
 
   await batch.commit();
+
+  await markSyncedRecords();
 }

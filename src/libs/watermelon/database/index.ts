@@ -4,6 +4,7 @@ import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite';
 import { fleetSchema } from '../schemas/schema';
 import { Historic } from '../models/Historic';
 import { migrations } from '../migrations/migrations';
+import { Log } from '../models/Log';
 
 // First, create the adapter to the underlying database:
 const adapter = new SQLiteAdapter({
@@ -23,5 +24,6 @@ export const database = new Database({
   adapter,
   modelClasses: [
     Historic,
+    Log,
   ],
 });

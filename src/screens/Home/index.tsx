@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import { useAuth } from "../../hooks/useAuth";
 import { useDatabase } from "../../hooks/useDatabase";
 import { useHistoric } from "../../hooks/useHistoric";
+import { useLog } from "../../hooks/useLog";
 
 import { CarStatus } from "../../components/CarStatus";
 import { HomeHeader } from "../../components/HomeHeader";
@@ -20,11 +21,13 @@ export function Home() {
   const [arrivalVehicles, setArrivalVehicles] = useState<HistoricCardProps[]>(
     []
   );
+  const [lastSyncedTime, setLastSyncedTime] = useState<Date | null>(null);
 
   const { user } = useAuth();
   const { navigate } = useNavigation();
   const { isSyncing, syncData } = useDatabase();
   const { observeHistoricByStatus } = useHistoric();
+  const { getLastSyncedTime } = useLog();
 
   function handleRegisterMovement() {
     if (currentVehicle?.id) {
@@ -57,7 +60,9 @@ export function Home() {
         return {
           id: item.id,
           licensePlate: item.license_plate,
-          isSync: false,
+          isSync: lastSyncedTime
+            ? lastSyncedTime.getTime() > item.updated_at.getTime()
+            : false,
           created: dayjs(item.created_at).format(
             "[Saída em] DD/MM/YYYY [às] HH:mm"
           ),
@@ -69,8 +74,14 @@ export function Home() {
     return () => subscription.unsubscribe();
   }, [user]);
 
+  async function fetchLastSyncedTime() {
+    await syncData();
+    const lastLog = await getLastSyncedTime({ user_id: user!.uid });
+    setLastSyncedTime(lastLog.updated_at);
+  }
+
   useEffect(() => {
-    syncData();
+    fetchLastSyncedTime();
   }, []);
 
   return (
