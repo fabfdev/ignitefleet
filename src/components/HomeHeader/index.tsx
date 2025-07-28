@@ -9,12 +9,24 @@ import { useAuth } from "../../hooks/useAuth";
 import theme from "../../theme";
 
 import defaultImg from "../../../assets/icon.png";
+import { useHistoric } from "../../hooks/useHistoric";
 
 export function HomeHeader() {
-  const { user, signOut } = useAuth();
   const insets = useSafeAreaInsets();
 
+  const { user, signOut } = useAuth();
+  const { deleteAllHistoric } = useHistoric();
+
   const paddingTop = insets.top + 32;
+
+  async function signOutApp() {
+    try {
+      await deleteAllHistoric({ user_id: user?.uid || "" });
+      signOut();
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <Container style={{ paddingTop: paddingTop }}>
@@ -28,7 +40,7 @@ export function HomeHeader() {
         <Name>{user?.displayName}</Name>
       </Greeting>
 
-      <TouchableOpacity onPress={signOut} activeOpacity={0.7}>
+      <TouchableOpacity onPress={signOutApp} activeOpacity={0.7}>
         <PowerIcon size={32} color={theme.COLORS.GRAY_400} />
       </TouchableOpacity>
     </Container>

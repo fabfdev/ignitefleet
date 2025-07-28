@@ -114,6 +114,23 @@ export function useHistoric() {
     }
   }
 
+  async function deleteAllHistoric(data: { user_id: string }) {
+    try {
+      const historic = await database
+        .get<Historic>("historic")
+        .query(Q.where("user_id", data.user_id))
+        .fetch();
+      await database.write(async () => {
+        historic.forEach(async (item) => {
+          await item.destroyPermanently();
+        });
+      });
+    } catch (error) {
+      console.error("Error deleting historic:", error);
+      throw error;
+    }
+  }
+
   return {
     createHistoric,
     observeHistoricByStatus,
@@ -122,5 +139,6 @@ export function useHistoric() {
     getHistoricByUserAndDeparture,
     updateHistoric,
     deleteHistoric,
+    deleteAllHistoric,
   };
 }
