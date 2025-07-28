@@ -3,6 +3,7 @@ import firestore, {
 } from "@react-native-firebase/firestore";
 import { SyncPullArgs, SyncPullResult } from "@nozbe/watermelondb/sync";
 import { getAuth } from "@react-native-firebase/auth";
+import { markSyncedRecords } from "./markSyncedRecords";
 
 export async function pullChanges({
   lastPulledAt,
@@ -16,11 +17,12 @@ export async function pullChanges({
   ) as FirebaseFirestoreTypes.CollectionReference;
 
   // Buscar todos modificados desde o último sync
-  const query = lastPulledAt
+  /*const query = lastPulledAt
     ? collection
         .where("updated_at", ">", lastPulledAt)
         .where("user_id", "==", user?.uid)
-    : collection.where("user_id", "==", user?.uid);
+    : collection.where("user_id", "==", user?.uid);*/
+  const query = collection.where("user_id", "==", user?.uid);
 
   // Buscar deletados
   const queryDeleted = collectionDeleted.where("user_id", "==", user?.uid);
@@ -56,7 +58,9 @@ export async function pullChanges({
     const data = doc.data();
 
     deleted.push(data.id);
-  })
+  });
+
+  await markSyncedRecords();
 
   return {
     changes: {

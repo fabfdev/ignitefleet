@@ -4,7 +4,8 @@ import NetInfo from "@react-native-community/netinfo";
 import { Database } from "@nozbe/watermelondb";
 import { database } from "../libs/watermelon/database";
 import { runSync } from "../libs/watermelon/sync";
-import { getAuth } from "@react-native-firebase/auth";
+
+import { useAuth } from "../hooks/useAuth";
 
 interface DatabaseContextType {
   database: Database;
@@ -23,7 +24,7 @@ interface DatabaseProviderProps {
 export function DatabaseContextProvider({ children }: DatabaseProviderProps) {
   const [isSyncing, setIsSyncing] = useState(false);
 
-  const user = getAuth().currentUser;
+  const { user } = useAuth();
 
   async function syncData() {
     if (!user?.uid) return;

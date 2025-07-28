@@ -9,19 +9,16 @@ import { useAuth } from "../../hooks/useAuth";
 import theme from "../../theme";
 
 import defaultImg from "../../../assets/icon.png";
-import { useHistoric } from "../../hooks/useHistoric";
 
 export function HomeHeader() {
   const insets = useSafeAreaInsets();
 
   const { user, signOut } = useAuth();
-  const { deleteAllHistoric } = useHistoric();
 
   const paddingTop = insets.top + 32;
 
   async function signOutApp() {
     try {
-      await deleteAllHistoric({ user_id: user?.uid || "" });
       signOut();
     } catch (error) {
       console.error(error);

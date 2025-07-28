@@ -81,7 +81,7 @@ export function Arrival() {
   async function fetchLastTimeSync() {
     try {
       const data = await getLastSyncedTime({ user_id: user?.uid || "" });
-      if (historic?.updated_at) {
+      if (historic?.updated_at && data.updated_at) {
         setDataNotSynced(
           historic?.updated_at.getTime() > data.updated_at.getTime()
         );
@@ -123,7 +123,8 @@ export function Arrival() {
 
       {dataNotSynced && (
         <AsyncMessage>
-          Sincronização da {historic?.status === "departure" ? " partida" : "chegada"} pendente
+          Sincronização da{" "}
+          {historic?.status === "departure" ? " partida" : "chegada"} pendente
         </AsyncMessage>
       )}
     </Container>

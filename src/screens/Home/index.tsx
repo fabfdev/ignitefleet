@@ -28,7 +28,7 @@ export function Home() {
   const { navigate } = useNavigation();
   const { isSyncing, syncData } = useDatabase();
   const { observeHistoricByStatus } = useHistoric();
-  const { getLastSyncedTime } = useLog();
+  const { getLastSyncedTime, observeLastSyncedTime } = useLog();
 
   function handleRegisterMovement() {
     if (currentVehicle?.id) {
@@ -46,42 +46,54 @@ export function Home() {
     setLastSyncedTime(lastLog.updated_at);
   }
 
-  useEffect(() => {
-    const subscription = observeHistoricByStatus(
-      user!.uid,
-      "departure"
-    ).subscribe((historicList) => {
-      setCurrentVehicle(historicList[0]);
+  function mapArrivalData(historicList: Historic[]) {
+    const data = historicList.map((item) => {
+      return {
+        id: item.id,
+        licensePlate: item.license_plate,
+        isSync: lastSyncedTime
+          ? lastSyncedTime.getTime() > item.updated_at.getTime()
+          : false,
+        created: dayjs(item.created_at).format(
+          "[Saída em] DD/MM/YYYY [às] HH:mm"
+        ),
+      };
     });
-
-    return () => subscription.unsubscribe();
-  }, [user]);
+    setArrivalVehicles(data);
+  }
 
   useEffect(() => {
-    const subscription = observeHistoricByStatus(
-      user!.uid,
-      "arrival"
-    ).subscribe((historicList) => {
-      const data = historicList.map((item) => {
-        return {
-          id: item.id,
-          licensePlate: item.license_plate,
-          isSync: lastSyncedTime
-            ? lastSyncedTime.getTime() > item.updated_at.getTime()
-            : false,
-          created: dayjs(item.created_at).format(
-            "[Saída em] DD/MM/YYYY [às] HH:mm"
-          ),
-        };
+    const subscription = observeHistoricByStatus(user!.uid, "departure")
+      .observe()
+      .subscribe((historicList) => {
+        setCurrentVehicle(historicList[0]);
       });
-      setArrivalVehicles(data);
-    });
 
     return () => subscription.unsubscribe();
-  }, [user, lastSyncedTime]);
+  }, [lastSyncedTime]);
+
+  useEffect(() => {
+    const subscription = observeHistoricByStatus(user!.uid, "arrival")
+      .observe()
+      .subscribe((historicList) => {
+        mapArrivalData(historicList);
+      });
+
+    return () => subscription.unsubscribe();
+  }, [lastSyncedTime]);
 
   useEffect(() => {
     fetchLastSyncedTime();
+  }, [user]);
+
+  useEffect(() => {
+    const subscription = observeLastSyncedTime({ user_id: user!.uid })
+      .observe()
+      .subscribe(() => {
+        fetchLastSyncedTime()
+      });
+
+    return () => subscription.unsubscribe();
   }, [user]);
 
   useEffect(() => {

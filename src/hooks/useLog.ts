@@ -31,5 +31,11 @@ export function useLog() {
     }
   }
 
-  return { getLogByUser, getLastSyncedTime };
+  function observeLastSyncedTime(data: { user_id: string }) {
+    return database
+      .get<Log>("log")
+      .query(Q.where("user_id", data.user_id), Q.sortBy("updated_at", Q.desc));
+  }
+
+  return { getLogByUser, getLastSyncedTime, observeLastSyncedTime };
 }
