@@ -40,7 +40,7 @@ export function DatabaseContextProvider({ children }: DatabaseProviderProps) {
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
-      if (state.isConnected) {
+      if (state.isConnected && !isSyncing) {
         syncData();
       }
     });

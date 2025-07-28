@@ -4,6 +4,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { ControlIcon, XIcon } from "phosphor-react-native";
 
 import {
+  AsyncMessage,
   Container,
   Content,
   Description,
@@ -13,6 +14,8 @@ import {
 } from "./styles";
 
 import { useHistoric } from "../../hooks/useHistoric";
+import { useLog } from "../../hooks/useLog";
+import { useAuth } from "../../hooks/useAuth";
 
 import { Header } from "../../components/Header";
 import { Button } from "../../components/Button";
@@ -26,9 +29,12 @@ type RouteParamProps = {
 export function Arrival() {
   const route = useRoute();
   const { getHistoricById, deleteHistoric, updateHistoric } = useHistoric();
+  const { getLastSyncedTime } = useLog();
+  const { user } = useAuth();
   const { goBack } = useNavigation();
 
   const [historic, setHistoric] = useState<Historic | null>(null);
+  const [dataNotSynced, setDataNotSynced] = useState(false);
 
   const { id } = route.params as RouteParamProps;
 
@@ -72,9 +78,26 @@ export function Arrival() {
     }
   }
 
+  async function fetchLastTimeSync() {
+    try {
+      const data = await getLastSyncedTime({ user_id: user?.uid || "" });
+      if (historic?.updated_at) {
+        setDataNotSynced(
+          historic?.updated_at.getTime() > data.updated_at.getTime()
+        );
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   useEffect(() => {
     fetchHistoric();
-  }, []);
+  }, [id]);
+
+  useEffect(() => {
+    fetchLastTimeSync();
+  }, [user, historic]);
 
   return (
     <Container>
@@ -96,6 +119,12 @@ export function Arrival() {
           <ButtonIcon icon={XIcon} onPress={handleRemoveVehicleUsage} />
           <Button title="Registrar chegada" onPress={handleArrivalRegister} />
         </Footer>
+      )}
+
+      {dataNotSynced && (
+        <AsyncMessage>
+          Sincronização da {historic?.status === "departure" ? " partida" : "chegada"} pendente
+        </AsyncMessage>
       )}
     </Container>
   );

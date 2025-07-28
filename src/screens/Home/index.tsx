@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import dayjs from "dayjs";
+import Toast from "react-native-toast-message";
 
 import { useAuth } from "../../hooks/useAuth";
 import { useDatabase } from "../../hooks/useDatabase";
@@ -40,6 +41,11 @@ export function Home() {
     return navigate("arrival", { id });
   }
 
+  async function fetchLastSyncedTime() {
+    const lastLog = await getLastSyncedTime({ user_id: user!.uid });
+    setLastSyncedTime(lastLog.updated_at);
+  }
+
   useEffect(() => {
     const subscription = observeHistoricByStatus(
       user!.uid,
@@ -72,17 +78,25 @@ export function Home() {
     });
 
     return () => subscription.unsubscribe();
-  }, [user]);
-
-  async function fetchLastSyncedTime() {
-    await syncData();
-    const lastLog = await getLastSyncedTime({ user_id: user!.uid });
-    setLastSyncedTime(lastLog.updated_at);
-  }
+  }, [user, lastSyncedTime]);
 
   useEffect(() => {
     fetchLastSyncedTime();
-  }, []);
+  }, [user]);
+
+  useEffect(() => {
+    if (isSyncing) {
+      Toast.show({
+        type: "info",
+        text1: "Todos os dados estão sendo sincronizados",
+      });
+    } else {
+      Toast.show({
+        type: "info",
+        text1: "Todos os dados estão sincronizados",
+      });
+    }
+  }, [isSyncing]);
 
   return (
     <Container>
