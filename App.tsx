@@ -23,6 +23,9 @@ import { TopMessage } from "./src/components/TopMessage";
 import { useAuth } from "./src/hooks/useAuth";
 import { Routes } from "./src/routes";
 
+// Desabilitar warnings de depreciação do Firebase
+(globalThis as any).RNFB_SILENCE_MODULAR_DEPRECATION_WARNINGS = true;
+
 export default function App() {
   const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold });
   const netInfo = useNetInfo();
