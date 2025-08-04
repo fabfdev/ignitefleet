@@ -9,6 +9,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import {
   LocationAccuracy,
+  LocationObjectCoords,
   LocationSubscription,
   useForegroundPermissions,
   watchPositionAsync,
@@ -26,6 +27,7 @@ import { TextAreaInput } from "../../components/TextAreaInput";
 import { Button } from "../../components/Button";
 import { Loading } from "../../components/Loading";
 import { LocationInfo } from "../../components/LocationInfo";
+import { Map } from "../../components/Map";
 
 import { licensePlateValidate } from "../../utils/licensePlateValidate";
 import { getAddressLocation } from "../../utils/getAddressLocation";
@@ -42,6 +44,8 @@ export function Departures() {
   const [isRegistering, setIsRegistering] = useState(false);
   const [isLoadingLocation, setIsLoadingLocation] = useState(true);
   const [currentAddress, setCurrentAddress] = useState<string | null>(null);
+  const [currentCoords, setCurrentCoords] =
+    useState<LocationObjectCoords | null>(null);
 
   const { createHistoric } = useHistoric();
   const { user } = useAuth();
@@ -100,6 +104,8 @@ export function Departures() {
         timeInterval: 1000,
       },
       (location) => {
+        setCurrentCoords(location.coords);
+
         getAddressLocation(location.coords)
           .then((address) => {
             if (address) {
@@ -144,6 +150,7 @@ export function Departures() {
         behavior={keyboardAvoidingViewBehavior}
       >
         <ScrollView>
+          {currentCoords && <Map coords={[currentCoords]} />}
           <Content>
             {currentAddress && (
               <LocationInfo
