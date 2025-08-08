@@ -23,6 +23,9 @@ module.exports = {
       config: {
         googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
       },
+      infoPlist: {
+        UIBackgroundModes: ["location"],
+      },
     },
     android: {
       googleServicesFile: "./google-services.json",
@@ -32,6 +35,13 @@ module.exports = {
       },
       edgeToEdgeEnabled: true,
       package: "com.felipefaustini.ignitefleet",
+      permissions: [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE",
+        "FOREGROUND_SERVICE_LOCATION",
+      ],
       config: {
         googleMaps: {
           apiKey: process.env.GOOGLE_MAPS_API_KEY,
@@ -49,7 +59,19 @@ module.exports = {
         {
           locationAlwaysAndWhenInUsePermission:
             "Allow $(PRODUCT_NAME) to use your location.",
+          isIosBackgroundLocationEnabled: true,
+          isAndroidBackgroundLocationEnabled: true,
+          isAndroidForegroundServiceEnabled: true,
         },
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useModularHeaders": true,
+            "useFrameworks": "static"
+          }
+        }
       ],
     ],
   },

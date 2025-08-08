@@ -12,6 +12,7 @@ import {
   LocationObjectCoords,
   LocationSubscription,
   useForegroundPermissions,
+  requestBackgroundPermissionsAsync,
   watchPositionAsync,
 } from "expo-location";
 import { CarIcon } from "phosphor-react-native";
@@ -31,6 +32,7 @@ import { Map } from "../../components/Map";
 
 import { licensePlateValidate } from "../../utils/licensePlateValidate";
 import { getAddressLocation } from "../../utils/getAddressLocation";
+import { startLocationTask } from "../../tasks/backgroundLocationTask";
 
 const keyboardAvoidingViewBehavior =
   Platform.OS === "android" ? "height" : "position";
@@ -65,7 +67,18 @@ export function Departures() {
         return Alert.alert("Finalidade", "finalidade inválida");
       }
 
+      if (!currentCoords?.latitude && !currentCoords?.longitude) {
+        return Alert.alert("Localização", "coordenadas inválidas");
+      }
+
       setIsRegistering(true);
+
+      const backgroundPermissions = await requestBackgroundPermissionsAsync();
+
+      if (!backgroundPermissions.granted) {
+        setIsRegistering(false);
+        return Alert.alert("Localização", "permissão em background não aceita");
+      }
 
       await createHistoric({
         user_id: user!.uid,
@@ -74,12 +87,14 @@ export function Departures() {
         status: "departure",
       });
 
+      await startLocationTask();
+
       Alert.alert("Saída", "Saída do veículo registrada!");
 
       return goBack();
     } catch (error) {
       setIsRegistering(false);
-      console.log(error);
+      console.error(error);
       return Alert.alert(
         "Erro",
         "não foi possível registrar a saída do veículo"

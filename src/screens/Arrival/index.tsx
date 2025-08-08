@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { ControlIcon, XIcon } from "phosphor-react-native";
+import { LatLng } from "react-native-maps";
 
 import {
   AsyncMessage,
@@ -22,6 +23,10 @@ import { Button } from "../../components/Button";
 import { ButtonIcon } from "../../components/ButtonIcon";
 import { Historic } from "../../libs/watermelon/models/Historic";
 
+import { stopLocationTask } from "../../tasks/backgroundLocationTask";
+import { getStorageLocations, removeStorageLocations } from "../../libs/asyncStorage/locationStorage";
+import { Map } from "../../components/Map";
+
 type RouteParamProps = {
   id: string;
 };
@@ -35,6 +40,7 @@ export function Arrival() {
 
   const [historic, setHistoric] = useState<Historic | null>(null);
   const [dataNotSynced, setDataNotSynced] = useState(false);
+  const [coordinates, setCoordinates] = useState<LatLng[]>([]);
 
   const { id } = route.params as RouteParamProps;
 
@@ -47,6 +53,7 @@ export function Arrival() {
 
   async function removeVehicleUsage() {
     await deleteHistoric(id);
+    await removeStorageLocations();
     goBack();
   }
 
@@ -60,6 +67,8 @@ export function Arrival() {
       }
 
       await updateHistoric(id, { status: "arrival", updated_at: new Date() });
+      
+      await stopLocationTask();
 
       Alert.alert("Chegada", "Chegada registrada com sucesso!");
 
@@ -86,6 +95,9 @@ export function Arrival() {
           historic?.updated_at.getTime() > data.updated_at.getTime()
         );
       }
+
+      const locations = await getStorageLocations();
+      setCoordinates(locations);
     } catch (error) {
       console.error(error);
     }
@@ -104,6 +116,9 @@ export function Arrival() {
       <Header
         title={historic?.status === "departure" ? "Chegada" : "Detalhes"}
       />
+
+      {coordinates.length > 0 && <Map coords={coordinates} />}
+
       <Content>
         <Label>Placa do veículo</Label>
 

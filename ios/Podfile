@@ -15,7 +15,6 @@ prepare_react_native_project!
 
 target 'ignitefleet' do
   use_expo_modules!
-  use_modular_headers!
 
   if ENV['EXPO_USE_COMMUNITY_AUTOLINKING'] == '1'
     config_command = ['node', '-e', "process.argv=['', '', 'config'];require('@react-native-community/cli').run()"];
@@ -34,9 +33,6 @@ target 'ignitefleet' do
   pod 'react-native-google-maps', path: File.dirname(`node --print "require.resolve('react-native-maps/package.json')"`)
 # @generated end react-native-maps
   config = use_native_modules!(config_command)
-
-  # WatermelonDB dependency
-  pod 'simdjson', path: '../node_modules/@nozbe/simdjson', modular_headers: true
 
   use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
   use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym if ENV['USE_FRAMEWORKS']
