@@ -36,8 +36,8 @@ export function useHistoric() {
         Q.where("user_id", userId),
         Q.where("status", status),
         Q.sortBy("created_at", Q.desc)
-      )
-      // .observe();
+      );
+    // .observe();
   }
 
   async function getHistoricById(id: string) {

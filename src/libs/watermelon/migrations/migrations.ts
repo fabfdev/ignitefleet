@@ -24,5 +24,19 @@ export const migrations = schemaMigrations({
         }),
       ],
     },
+    {
+      toVersion: 4,
+      steps: [
+        createTable({
+          name: "location",
+          columns: [
+            { name: "latitude", type: "number" },
+            { name: "longitude", type: "number" },
+            { name: "timestamp", type: "number" },
+            { name: "historic_id", type: "string", isIndexed: true },
+          ],
+        }),
+      ],
+    },
   ],
 });

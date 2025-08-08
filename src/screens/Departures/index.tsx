@@ -17,10 +17,11 @@ import {
 } from "expo-location";
 import { CarIcon } from "phosphor-react-native";
 
-import { Container, Content, Message } from "./styles";
+import { Container, Content, Message, MessageContent } from "./styles";
 
 import { useHistoric } from "../../hooks/useHistoric";
 import { useAuth } from "../../hooks/useAuth";
+import { useDatabase } from "../../hooks/useDatabase";
 
 import { Header } from "../../components/Header";
 import { LicensePlateInput } from "../../components/LicensePlateInput";
@@ -32,7 +33,9 @@ import { Map } from "../../components/Map";
 
 import { licensePlateValidate } from "../../utils/licensePlateValidate";
 import { getAddressLocation } from "../../utils/getAddressLocation";
+import { openSettings } from "../../utils/openSettings";
 import { startLocationTask } from "../../tasks/backgroundLocationTask";
+import { Location } from "../../libs/watermelon/models/Location";
 
 const keyboardAvoidingViewBehavior =
   Platform.OS === "android" ? "height" : "position";
@@ -54,6 +57,7 @@ export function Departures() {
   const { goBack } = useNavigation();
   const [locationForegroundPermission, requestLocationForegroundPermission] =
     useForegroundPermissions();
+  const { database } = useDatabase(); // remove it from here
 
   async function handleDepartureRegister() {
     try {
@@ -77,14 +81,33 @@ export function Departures() {
 
       if (!backgroundPermissions.granted) {
         setIsRegistering(false);
-        return Alert.alert("Localização", "permissão em background não aceita");
+        return Alert.alert(
+          "Localização",
+          "permissão em background não aceita",
+          [
+            {
+              text: "Abrir configurações",
+              onPress: openSettings,
+            },
+          ]
+        );
       }
 
-      await createHistoric({
+      const historic = await createHistoric({
         user_id: user!.uid,
         license_plate: licensePlate,
         description: description,
         status: "departure",
+      });
+
+      await database.write(async () => {
+        return await database.get<Location>("location").create((location) => {
+          location.latitude = currentCoords.latitude;
+          location.longitude = currentCoords.longitude;
+          location.timestamp = new Date();
+
+          location.historic.set(historic);
+        });
       });
 
       await startLocationTask();
@@ -143,11 +166,16 @@ export function Departures() {
       <Container>
         <Header title="Saída" />
 
-        <Message>
-          Você precisa permitir que o aplicativo tenha acesso a localização para
-          utilizar essa funcionalidade. Por favor, acesse as configurações do
-          seu dispositivo para conceder essa permissão ao aplicativo
-        </Message>
+        <MessageContent>
+          <Message>
+            Você precisa permitir que o aplicativo tenha acesso a localização
+            para utilizar essa funcionalidade. Por favor, acesse as
+            configurações do seu dispositivo para conceder essa permissão ao
+            aplicativo
+          </Message>
+
+          <Button title="Abrir configurações" onPress={openSettings} />
+        </MessageContent>
       </Container>
     );
   }
